@@ -2,12 +2,12 @@ package com.odom.ledscreen
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.widget.Button
+import android.widget.RelativeLayout
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.odom.ledscreen.databinding.ActivityMainBinding
-import kotlinx.android.synthetic.main.activity_main.*
-
 
 import java.util.ArrayList
 
@@ -20,6 +20,12 @@ class ExampleActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorCl
     private val COLOR_02 = "COLOR_02"
     private val DIALOG_01_IS_VISIBLE = "DIALOG_01_IS_VISIBLE"
     private val DIALOG_02_IS_VISIBLE = "DIALOG_02_IS_VISIBLE"
+
+    private lateinit var colorSelected01: RelativeLayout
+    private lateinit var colorSelected02: RelativeLayout
+
+    private lateinit var buttonSelector01: Button
+    private lateinit var buttonSelector02: Button
 
     var visibleDialog1: Boolean = false
 
