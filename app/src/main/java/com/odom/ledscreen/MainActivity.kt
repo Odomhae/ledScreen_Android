@@ -3,7 +3,7 @@ package com.odom.ledscreen
 import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.Button
-import android.widget.RelativeLayout
+import android.widget.TextView
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -11,7 +11,7 @@ import com.odom.ledscreen.databinding.ActivityMainBinding
 
 import java.util.ArrayList
 
-class ExampleActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClickListener {
+class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClickListener {
     private lateinit var colorSelectorDialog1: ColorSelectorDialog
     private lateinit var colorSelectorDialog2: ColorSelectorDialog
     private val COLOR_SELECTOR_01 = "colorSelector01"
@@ -21,11 +21,9 @@ class ExampleActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorCl
     private val DIALOG_01_IS_VISIBLE = "DIALOG_01_IS_VISIBLE"
     private val DIALOG_02_IS_VISIBLE = "DIALOG_02_IS_VISIBLE"
 
-    private lateinit var colorSelected01: RelativeLayout
-    private lateinit var colorSelected02: RelativeLayout
-
     private lateinit var buttonSelector01: Button
     private lateinit var buttonSelector02: Button
+    private lateinit var textViewNote : TextView
 
     var visibleDialog1: Boolean = false
 
@@ -38,6 +36,10 @@ class ExampleActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorCl
         val view = binding.root
         setContentView(view)
 
+        buttonSelector01 = binding.buttonSelector01
+        buttonSelector02 = binding.buttonSelector02
+        textViewNote = binding.textViewNote
+
         val builder = ColorSelectorDialogBuilder()
         colorSelectorDialog1 = builder.setOnDialogColorClickListener(this)
             .setColorList(getColorsList())
@@ -45,7 +47,7 @@ class ExampleActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorCl
             .setFigureType(FigureType.CIRCLE)
             .build()
 
-        colorSelected01.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
+        textViewNote.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
 
         val builder2 = ColorSelectorDialogBuilder()
         colorSelectorDialog2 = builder2.setOnDialogColorClickListener(this)
@@ -58,7 +60,7 @@ class ExampleActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorCl
             if (savedInstanceState.containsKey(COLOR_01)) {
                 colorSelectorDialog1.selectedColor = savedInstanceState.getInt(COLOR_01)
                 colorSelectorDialog1.selectedColor?.let {
-                    colorSelected01.setBackgroundColor(ContextCompat.getColor(this, it))
+                    textViewNote.setBackgroundColor(ContextCompat.getColor(this, it))
                 }
             }
             if (savedInstanceState.containsKey(DIALOG_01_IS_VISIBLE) && savedInstanceState.getBoolean(DIALOG_01_IS_VISIBLE)) {
@@ -68,7 +70,7 @@ class ExampleActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorCl
             if (savedInstanceState.containsKey(COLOR_02)) {
                 colorSelectorDialog2.selectedColor = savedInstanceState.getInt(COLOR_02)
                 colorSelectorDialog2.selectedColor?.let {
-                    colorSelected02.setBackgroundColor(ContextCompat.getColor(this, it))
+                    textViewNote.setTextColor(ContextCompat.getColor(this, it))
                 }
             }
 
@@ -146,17 +148,18 @@ class ExampleActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorCl
     override fun onColorClick(tagDialog: String, selectedColor: Int?) {
         if (tagDialog == COLOR_SELECTOR_01) {
             if (selectedColor != null) {
-                colorSelected01.setBackgroundColor(ContextCompat.getColor(this, colorSelectorDialog1.selectedColor!!))
+                textViewNote.setBackgroundColor(ContextCompat.getColor(this, colorSelectorDialog1.selectedColor!!))
             } else {
-                colorSelected01.background = null
+                textViewNote.background = null
             }
         }
 
         if (tagDialog == COLOR_SELECTOR_02) {
             if (selectedColor != null) {
-                colorSelected02.setBackgroundColor(ContextCompat.getColor(this, selectedColor))
+                textViewNote.setTextColor(ContextCompat.getColor(this, selectedColor))
+
             } else {
-                colorSelected02.background = null
+                textViewNote.background = null
             }
         }
     }

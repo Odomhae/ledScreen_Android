@@ -1,107 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.odom.ledscreen.ColorSelectorDialog"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fadeScrollbars="false"
-    tools:context="com.odom.ledscreen.ColorSelectorDialog">
+    android:padding="8dp"
+    android:background="@color/black" >
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/activity_example"
+<TextView
+    android:id="@+id/textViewNote"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:gravity="center"
+    android:layout_alignParentTop="true"
+    android:layout_marginHorizontal="15dp"
+    android:layout_marginVertical="10dp"
+    android:text="love♥"
+    android:textColor="#de000000"
+    android:background="@color/white"
+    android:textSize="34dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/et_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        tools:context="com.app.herysapps.examplecolorselector.ExampleActivity">
+        android:text="love♥"
+        android:layout_marginVertical="10dp"
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@+id/textViewNote" />
 
-        <TextView
-            android:id="@+id/textViewNote"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginRight="24dp"
-            android:text="@string/note"
-            android:textColor="#de000000"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:id="@+id/ll_color"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/et_input"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/buttonSelector01"
             android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
             android:layout_marginStart="24dp"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:text="@string/button_01"
-            app:layout_constraintEnd_toStartOf="@+id/buttonSelector02"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewNote" />
-
-        <RelativeLayout
-            android:id="@+id/colorSelected01"
-            android:layout_width="0dp"
-            android:layout_height="45dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginStart="24dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_toEndOf="@id/buttonSelector01"
-            android:layout_toRightOf="@id/buttonSelector01"
-            app:layout_constraintEnd_toStartOf="@+id/colorSelected02"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttonSelector01" />
+            android:text="배경색" />
 
         <Button
             android:id="@+id/buttonSelector02"
             android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp"
-            android:text="@string/button_02"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/buttonSelector01"
-            app:layout_constraintTop_toBottomOf="@+id/textViewNote" />
+            android:text="글자색" />
 
-        <RelativeLayout
-            android:id="@+id/colorSelected02"
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/ll_color">
+
+        <ImageButton
+            android:id="@+id/buttonLeft"
             android:layout_width="0dp"
-            android:layout_height="45dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
+            android:layout_weight="1"
+            android:src="@drawable/ic_arrow_left"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
-            android:layout_marginRight="24dp"
-            android:layout_toEndOf="@id/buttonSelector02"
-            android:layout_toRightOf="@id/buttonSelector02"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/colorSelected01"
-            app:layout_constraintTop_toBottomOf="@+id/buttonSelector02" />
+            android:layout_marginRight="24dp" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageButton
+            android:id="@+id/buttonRight"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_arrow_right2"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp" />
 
-</ScrollView>
+        <ImageButton
+            android:id="@+id/buttonPlus"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_plus"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp" />
+
+        <ImageButton
+            android:id="@+id/buttonMinus"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:src="@drawable/ic_minus"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp" />
+
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
 

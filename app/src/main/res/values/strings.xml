@@ -3,27 +3,6 @@
 
     <string name="button_01">colorSelectorDialog1</string>
     <string name="button_02">colorSelectorDialog2</string>
-    <string name="pepe">
-        val colorList = ArrayList&lt;Int&gt;()\n
-        colorList.add(0, R.color.red)\n
-        colorList.add(1, R.color.pink)\n
-        colorList.add(2, R.color.purple)\n
-        &#8230;\n\n
-        val builder1 = ColorSelectorDialogBuilder()\n
-        var colorSelectorDialog1 = builder1.setOnDialogColorClickListener(this)\n
-        .setColorList(getColorsList())\n
-        .setSelectedColor(R.color.light_green)\n
-        .setFigureType(FigureType.CIRCLE)\n
-        .build()
-        \n\n
-        val builder2 = ColorSelectorDialogBuilder()\n
-        colorSelectorDialog2 = builder2.setOnDialogColorClickListener(this)\n
-        .setColorList(getColorsList(true))\n
-        .setFigureType(FigureType.SQUARE)\n
-        .build()\n
-        \n
-        colorSelectorDialog1.show(supportFragmentManager, tag)\n
-        colorSelectorDialog2.show(supportFragmentManager, tag)\n
-    </string>
+
     <string name="note">Note: The example module shows how to handle configuration changes</string>
 </resources>
