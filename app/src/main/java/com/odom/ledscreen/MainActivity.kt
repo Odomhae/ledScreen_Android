@@ -2,14 +2,17 @@ package com.odom.ledscreen
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
-
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.odom.ledscreen.databinding.ActivityMainBinding
 
-import java.util.ArrayList
 
 class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClickListener {
     private lateinit var colorSelectorDialog1: ColorSelectorDialog
@@ -24,6 +27,9 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
     private lateinit var buttonSelector01: Button
     private lateinit var buttonSelector02: Button
     private lateinit var textViewNote : TextView
+    private lateinit var editTextInput: EditText
+    private lateinit var buttonBlink: Button
+
 
     var visibleDialog1: Boolean = false
 
@@ -39,6 +45,8 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
         buttonSelector01 = binding.buttonSelector01
         buttonSelector02 = binding.buttonSelector02
         textViewNote = binding.textViewNote
+        editTextInput = binding.etInput
+        buttonBlink = binding.buttonBlink
 
         val builder = ColorSelectorDialogBuilder()
         colorSelectorDialog1 = builder.setOnDialogColorClickListener(this)
@@ -81,6 +89,27 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
 
         buttonSelector01.setOnClickListener { showDialog(colorSelectorDialog1, COLOR_SELECTOR_01) }
         buttonSelector02.setOnClickListener { showDialog(colorSelectorDialog2, COLOR_SELECTOR_02) }
+
+        buttonBlink.setOnClickListener {
+            val blink: Animation = AnimationUtils.loadAnimation(this, R.anim.blink)
+         //   if (buttonBlink.isSelected) {
+                textViewNote.startAnimation(blink)
+          //  } else {
+               //todo
+            //}
+        }
+
+        editTextInput.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(s: Editable) {}
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence, start: Int,
+                                       before: Int, count: Int) {
+                textViewNote.text = s
+            }
+        })
+
     }
 
     private fun getColorsList(useAll: Boolean = false) : List<Int>{

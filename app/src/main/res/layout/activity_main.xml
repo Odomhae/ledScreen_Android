@@ -69,6 +69,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_setting1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/ll_color">
@@ -120,6 +121,27 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
             android:layout_marginRight="24dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_setting2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/ll_setting1">
+
+        <Button
+            android:id="@+id/buttonBlink"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/selector_blue"
+            android:text="깜박임" />
 
     </LinearLayout>
 
