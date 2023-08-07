@@ -9,30 +9,52 @@
     android:padding="8dp"
     android:background="@color/black" >
 
-<TextView
-    android:id="@+id/textViewNote"
-    android:layout_width="match_parent"
-    android:layout_height="200dp"
-    android:gravity="center"
-    android:layout_alignParentTop="true"
-    android:layout_marginHorizontal="15dp"
-    android:layout_marginVertical="10dp"
-    android:text="love♥"
-    android:textColor="#de000000"
-    android:background="@color/white"
-    android:textSize="34dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="미리보기"
+        android:textStyle="bold"
+        app:flow_verticalAlign="center"
+        app:flow_horizontalAlign="start"
+        android:textColor="@color/white"/>
+
+    <LinearLayout
+        android:id="@+id/ll_background"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue"
+        android:layout_marginTop="30dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_alignParentTop="true"
+        app:flow_horizontalAlign="center"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/textViewNote"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:gravity="center"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginVertical="10dp"
+            android:text="love♥"
+            android:singleLine="true"
+            android:textColor="#de000000"
+            android:background="@android:color/transparent"
+            android:textSize="34dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </LinearLayout>
 
     <EditText
         android:id="@+id/et_input"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:text="love♥"
         android:layout_marginVertical="10dp"
         android:background="@color/white"
-        app:layout_constraintTop_toBottomOf="@+id/textViewNote" />
+        app:layout_constraintTop_toBottomOf="@+id/ll_background" />
 
     <LinearLayout
         android:id="@+id/ll_color"
@@ -71,14 +93,14 @@
     <LinearLayout
         android:id="@+id/ll_setting1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         app:layout_constraintTop_toBottomOf="@+id/ll_color">
 
         <ImageButton
             android:id="@+id/buttonLeft"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:src="@drawable/ic_arrow_left"
+            android:src="@drawable/ic_left"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
@@ -90,7 +112,7 @@
             android:id="@+id/buttonRight"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:src="@drawable/ic_arrow_right2"
+            android:src="@drawable/ic_right"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
@@ -128,22 +150,41 @@
         android:id="@+id/ll_setting2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@+id/ll_setting1">
 
         <Button
             android:id="@+id/buttonBlink"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginLeft="24dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:background="@drawable/selector_blue"
             android:text="깜박임" />
 
+        <Button
+            android:id="@+id/buttonStart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:text="시작" />
+
     </LinearLayout>
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adMobView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:adSize="BANNER"
+        app:adUnitId="@string/TEST_banner_ad_unit_id">
+    </com.google.android.gms.ads.AdView>
 
 
 

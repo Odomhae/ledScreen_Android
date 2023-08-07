@@ -4,13 +4,21 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.DisplayMetrics
+import android.util.TypedValue
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import com.odom.ledscreen.databinding.ActivityMainBinding
 
 
@@ -23,12 +31,30 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
     private val COLOR_02 = "COLOR_02"
     private val DIALOG_01_IS_VISIBLE = "DIALOG_01_IS_VISIBLE"
     private val DIALOG_02_IS_VISIBLE = "DIALOG_02_IS_VISIBLE"
+    private var Fontsize = 34f
 
+    private lateinit var ll_background: LinearLayout
     private lateinit var buttonSelector01: Button
     private lateinit var buttonSelector02: Button
     private lateinit var textViewNote : TextView
     private lateinit var editTextInput: EditText
     private lateinit var buttonBlink: Button
+    private lateinit var buttonPlus: ImageButton
+    private lateinit var buttonMinus: ImageButton
+
+    // 광고
+    lateinit var mAdView : AdView
+    private val adSize: AdSize
+        get() {
+            val display = windowManager.defaultDisplay
+            val outMetrics = DisplayMetrics()
+            display.getMetrics(outMetrics)
+
+            val density = outMetrics.density
+            val adWidthPixels = outMetrics.widthPixels.toFloat()
+            val adWidth = (adWidthPixels / density).toInt()
+            return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth)
+        }
 
 
     var visibleDialog1: Boolean = false
@@ -42,11 +68,14 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
         val view = binding.root
         setContentView(view)
 
+        ll_background = binding.llBackground
         buttonSelector01 = binding.buttonSelector01
         buttonSelector02 = binding.buttonSelector02
         textViewNote = binding.textViewNote
         editTextInput = binding.etInput
         buttonBlink = binding.buttonBlink
+        buttonPlus = binding.buttonPlus
+        buttonMinus = binding.buttonMinus
 
         val builder = ColorSelectorDialogBuilder()
         colorSelectorDialog1 = builder.setOnDialogColorClickListener(this)
@@ -55,7 +84,7 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
             .setFigureType(FigureType.CIRCLE)
             .build()
 
-        textViewNote.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
+        ll_background.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
 
         val builder2 = ColorSelectorDialogBuilder()
         colorSelectorDialog2 = builder2.setOnDialogColorClickListener(this)
@@ -68,7 +97,7 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
             if (savedInstanceState.containsKey(COLOR_01)) {
                 colorSelectorDialog1.selectedColor = savedInstanceState.getInt(COLOR_01)
                 colorSelectorDialog1.selectedColor?.let {
-                    textViewNote.setBackgroundColor(ContextCompat.getColor(this, it))
+                    ll_background.setBackgroundColor(ContextCompat.getColor(this, it))
                 }
             }
             if (savedInstanceState.containsKey(DIALOG_01_IS_VISIBLE) && savedInstanceState.getBoolean(DIALOG_01_IS_VISIBLE)) {
@@ -92,11 +121,23 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
 
         buttonBlink.setOnClickListener {
             val blink: Animation = AnimationUtils.loadAnimation(this, R.anim.blink)
-         //   if (buttonBlink.isSelected) {
+            if (!buttonBlink.isSelected) {
                 textViewNote.startAnimation(blink)
-          //  } else {
-               //todo
-            //}
+                buttonBlink.isSelected = true
+            } else {
+                textViewNote.clearAnimation()
+                buttonBlink.isSelected = false
+            }
+        }
+
+        buttonPlus.setOnClickListener {
+            Fontsize += 4f
+            textViewNote.setTextSize(TypedValue.COMPLEX_UNIT_DIP , Fontsize)
+        }
+
+        buttonMinus.setOnClickListener {
+            Fontsize -= 4f
+            textViewNote.setTextSize(TypedValue.COMPLEX_UNIT_DIP , Fontsize)
         }
 
         editTextInput.addTextChangedListener(object : TextWatcher {
@@ -110,6 +151,15 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
             }
         })
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+        // load Banner AD
+        MobileAds.initialize(this) {}
+        mAdView = findViewById(R.id.adMobView)
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
     }
 
     private fun getColorsList(useAll: Boolean = false) : List<Int>{
@@ -177,9 +227,9 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
     override fun onColorClick(tagDialog: String, selectedColor: Int?) {
         if (tagDialog == COLOR_SELECTOR_01) {
             if (selectedColor != null) {
-                textViewNote.setBackgroundColor(ContextCompat.getColor(this, colorSelectorDialog1.selectedColor!!))
+                ll_background.setBackgroundColor(ContextCompat.getColor(this, colorSelectorDialog1.selectedColor!!))
             } else {
-                textViewNote.background = null
+                ll_background.background = null
             }
         }
 
