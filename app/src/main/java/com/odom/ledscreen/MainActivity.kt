@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.animation.Animation
+import android.view.animation.AnimationSet
 import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -39,6 +40,8 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
     private lateinit var buttonStart: Button
     private lateinit var buttonPlus: ImageButton
     private lateinit var buttonMinus: ImageButton
+    private lateinit var buttonLeft : ImageButton
+    private lateinit var buttonRight : ImageButton
 
     // 광고
     lateinit var mAdView : AdView
@@ -75,6 +78,8 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
         buttonStart = binding.buttonStart
         buttonPlus = binding.buttonPlus
         buttonMinus = binding.buttonMinus
+        buttonLeft = binding.buttonLeft
+        buttonRight = binding.buttonRight
 
         val builder = ColorSelectorDialogBuilder()
         colorSelectorDialog1 = builder.setOnDialogColorClickListener(this)
@@ -83,7 +88,7 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
             .setFigureType(FigureType.CIRCLE)
             .build()
 
-        ll_background.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
+        ll_background.setBackgroundColor(ContextCompat.getColor(this, R.color.lime))
 
         val builder2 = ColorSelectorDialogBuilder()
         colorSelectorDialog2 = builder2.setOnDialogColorClickListener(this)
@@ -119,13 +124,37 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
         buttonSelector02.setOnClickListener { showDialog(colorSelectorDialog2, COLOR_SELECTOR_02) }
 
         buttonBlink.setOnClickListener {
-            val blink: Animation = AnimationUtils.loadAnimation(this, R.anim.blink)
+            val animBlink: Animation = AnimationUtils.loadAnimation(this, R.anim.blink)
             if (!buttonBlink.isSelected) {
-                textViewNote.startAnimation(blink)
+                textViewNote.startAnimation(animBlink)
                 buttonBlink.isSelected = true
             } else {
                 textViewNote.clearAnimation()
                 buttonBlink.isSelected = false
+            }
+        }
+
+        buttonLeft.setOnClickListener {
+            val animMarqueeLeft : Animation = AnimationUtils.loadAnimation(this, R.anim.marquee_rtl)
+            if (!buttonLeft.isSelected) {
+                textViewNote.startAnimation(animMarqueeLeft)
+                buttonLeft.isSelected = true
+                buttonRight.isSelected = false
+            } else {
+                textViewNote.clearAnimation()
+                buttonLeft.isSelected = false
+            }
+        }
+
+        buttonRight.setOnClickListener {
+            val animMarqueeRight : Animation = AnimationUtils.loadAnimation(this, R.anim.marquee_ltr)
+            if (!buttonRight.isSelected) {
+                textViewNote.startAnimation(animMarqueeRight)
+                buttonRight.isSelected = true
+                buttonLeft.isSelected = false
+            } else {
+                textViewNote.clearAnimation()
+                buttonRight.isSelected = false
             }
         }
 

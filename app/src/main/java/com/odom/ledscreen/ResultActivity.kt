@@ -2,6 +2,7 @@ package com.odom.ledscreen
 
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.TextView
@@ -22,6 +23,10 @@ class ResultActivity  : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        actionBar?.hide();
+        supportActionBar?.hide();
 
         val ledIntent = intent
 

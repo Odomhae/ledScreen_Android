@@ -4,8 +4,6 @@
     <string name="button_01">colorSelectorDialog1</string>
     <string name="button_02">colorSelectorDialog2</string>
 
-    <string name="note">Note: The example module shows how to handle configuration changes</string>
-
     <string name="TEST_banner_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
     <string name="TEST_admob_app_id" translatable="false"> ca-app-pub-3940256099942544~3347511713</string>
 

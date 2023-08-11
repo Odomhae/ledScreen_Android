@@ -27,4 +27,7 @@
     <color name="blue_grey">#607D8B</color>
     <color name="brown">#795548</color>
 
+    <color name="dark_button_off">#FF4B4C4B</color>
+    <color name="dark_button_on">#ffe4e4e4</color>
+
 </resources>
