@@ -1,5 +1,6 @@
 package com.odom.ledscreen
 
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
@@ -8,7 +9,6 @@ import android.text.TextWatcher
 import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.animation.Animation
-import android.view.animation.AnimationSet
 import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -123,13 +123,25 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
         buttonSelector01.setOnClickListener { showDialog(colorSelectorDialog1, COLOR_SELECTOR_01) }
         buttonSelector02.setOnClickListener { showDialog(colorSelectorDialog2, COLOR_SELECTOR_02) }
 
+        val animator =
+            ObjectAnimator.ofFloat(textViewNote, "alpha", 0.0f, 1.0f)
+
+        // duration of one color
+        animator.duration = 500
+        // color will be show in reverse manner
+        animator.repeatCount = Animation.REVERSE
+        // It will be repeated up to infinite time
+        animator.repeatCount = Animation.INFINITE
+
         buttonBlink.setOnClickListener {
             val animBlink: Animation = AnimationUtils.loadAnimation(this, R.anim.blink)
             if (!buttonBlink.isSelected) {
-                textViewNote.startAnimation(animBlink)
+                animator.start()
+                //textViewNote.startAnimation(animBlink)
                 buttonBlink.isSelected = true
             } else {
-                textViewNote.clearAnimation()
+                animator.cancel()
+         //       textViewNote.clearAnimation()
                 buttonBlink.isSelected = false
             }
         }
