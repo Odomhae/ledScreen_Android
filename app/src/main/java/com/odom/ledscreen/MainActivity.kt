@@ -1,5 +1,6 @@
 package com.odom.ledscreen
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
@@ -8,11 +9,7 @@ import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.gms.ads.AdRequest
@@ -39,6 +36,7 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
     private lateinit var textViewNote : TextView
     private lateinit var editTextInput: EditText
     private lateinit var buttonBlink: Button
+    private lateinit var buttonStart: Button
     private lateinit var buttonPlus: ImageButton
     private lateinit var buttonMinus: ImageButton
 
@@ -74,12 +72,13 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
         textViewNote = binding.textViewNote
         editTextInput = binding.etInput
         buttonBlink = binding.buttonBlink
+        buttonStart = binding.buttonStart
         buttonPlus = binding.buttonPlus
         buttonMinus = binding.buttonMinus
 
         val builder = ColorSelectorDialogBuilder()
         colorSelectorDialog1 = builder.setOnDialogColorClickListener(this)
-            .setColorList(getColorsList())
+            .setColorList(getColorsList(true))
             .setSelectedColor(R.color.light_green)
             .setFigureType(FigureType.CIRCLE)
             .build()
@@ -150,6 +149,19 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
                 textViewNote.text = s
             }
         })
+
+        buttonStart.setOnClickListener {
+            val ledIntent = Intent(this, ResultActivity::class.java)
+            ledIntent.putExtra("TextInput",  textViewNote.text.toString())
+            ledIntent.putExtra("BackColor",  colorSelectorDialog1.selectedColor)
+            ledIntent.putExtra("TextColor",  colorSelectorDialog2.selectedColor)
+
+            ledIntent.putExtra("fontSize",  Fontsize)
+            ledIntent.putExtra("Direction" , "STOP") // 글자 이동방향, STOP / LEFT / RIGHT
+            ledIntent.putExtra("isBlink",  buttonBlink.isSelected)
+
+            startActivity(ledIntent)
+        }
 
     }
 
