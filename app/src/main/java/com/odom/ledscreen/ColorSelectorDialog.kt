@@ -38,7 +38,7 @@ class ColorSelectorDialog : DialogFragment(), View.OnClickListener {
 
     private fun buildView(view: View) {
         (view.findViewById(R.id.rootLayoutColorSelector) as LinearLayout).removeAllViews()
-        view.setBackgroundResource(R.color.black)
+        view.setBackgroundResource(androidx.appcompat.R.color.material_blue_grey_800)
 
         val layoutParamsContainer = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)

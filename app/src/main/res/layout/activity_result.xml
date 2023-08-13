@@ -10,6 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
+        android:ellipsize="none"
+        android:singleLine="true"
         android:text="sample" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

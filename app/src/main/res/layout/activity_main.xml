@@ -35,13 +35,14 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:gravity="center"
-            android:layout_marginHorizontal="15dp"
+            android:layout_gravity="center"
             android:layout_marginVertical="10dp"
             android:text="love♥"
+            android:ellipsize="none"
             android:singleLine="true"
             android:textColor="#de000000"
             android:background="@android:color/transparent"
-            android:textSize="34dp"
+            android:textSize="54dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -75,7 +76,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:text="Background Color" />
+            android:text="Back Color" />
 
         <Button
             android:id="@+id/buttonSelector02"
@@ -157,7 +158,6 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:background="@drawable/selector_background"
             android:textSize="20dp"
             android:text="Blink" />
 
@@ -168,7 +168,6 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="30dp"
             android:layout_marginEnd="16dp"
-            android:background="@drawable/selector_background"
             android:textSize="25dp"
             android:textStyle="bold"
             android:text="START" />

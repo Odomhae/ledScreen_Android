@@ -42,10 +42,17 @@ class ResultActivity  : AppCompatActivity() {
 
         resultText.text = textInput
         resultBackground.setBackgroundColor(ContextCompat.getColor(this, backColor))
-        resultText.setBackgroundColor(ContextCompat.getColor(this, textColor))
-        resultText.setTextSize(TypedValue.COMPLEX_UNIT_DIP , fontSize)
+        resultText.setTextColor(ContextCompat.getColor(this, textColor))
+        resultText.setTextSize(TypedValue.COMPLEX_UNIT_DIP , fontSize*2)
 
         // TODO: Text Direction
+        val animMarqueeLeft : Animation = AnimationUtils.loadAnimation(this, R.anim.marquee_rtl)
+        val animMarqueeRight : Animation = AnimationUtils.loadAnimation(this, R.anim.marquee_ltr)
+
+        when(textDirection){
+            "LEFT" -> resultText.startAnimation(animMarqueeLeft)
+            "RIGHT" -> resultText.startAnimation(animMarqueeRight)
+        }
 
 
         if (isBlink){

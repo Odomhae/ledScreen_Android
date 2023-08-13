@@ -29,7 +29,8 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
     private val COLOR_02 = "COLOR_02"
     private val DIALOG_01_IS_VISIBLE = "DIALOG_01_IS_VISIBLE"
     private val DIALOG_02_IS_VISIBLE = "DIALOG_02_IS_VISIBLE"
-    private var Fontsize = 34f
+    private var Fontsize = 54f
+    private var TextDirection = "STOP"
 
     private lateinit var ll_background: LinearLayout
     private lateinit var buttonSelector01: Button
@@ -152,9 +153,11 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
                 textViewNote.startAnimation(animMarqueeLeft)
                 buttonLeft.isSelected = true
                 buttonRight.isSelected = false
+                TextDirection = "LEFT"
             } else {
                 textViewNote.clearAnimation()
                 buttonLeft.isSelected = false
+                TextDirection = "STOP"
             }
         }
 
@@ -162,11 +165,13 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
             val animMarqueeRight : Animation = AnimationUtils.loadAnimation(this, R.anim.marquee_ltr)
             if (!buttonRight.isSelected) {
                 textViewNote.startAnimation(animMarqueeRight)
+                TextDirection = "RIGHT"
                 buttonRight.isSelected = true
                 buttonLeft.isSelected = false
             } else {
                 textViewNote.clearAnimation()
                 buttonRight.isSelected = false
+                TextDirection = "STOP"
             }
         }
 
@@ -198,7 +203,7 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
             ledIntent.putExtra("TextColor",  colorSelectorDialog2.selectedColor)
 
             ledIntent.putExtra("fontSize",  Fontsize)
-            ledIntent.putExtra("Direction" , "STOP") // 글자 이동방향, STOP / LEFT / RIGHT
+            ledIntent.putExtra("Direction" , TextDirection) // 글자 이동방향, STOP / LEFT / RIGHT
             ledIntent.putExtra("isBlink",  buttonBlink.isSelected)
 
             startActivity(ledIntent)
@@ -239,6 +244,7 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
             colorList.add(17, R.color.blue_grey)
             colorList.add(18, R.color.brown)
             colorList.add(19, R.color.black)
+            colorList.add(20, R.color.white)
         }
 
         return colorList
