@@ -180,7 +180,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:adSize="BANNER"
-        app:adUnitId="@string/TEST_banner_ad_unit_id">
+        app:adUnitId="@string/REAL_banner_ad_unit_id">
     </com.google.android.gms.ads.AdView>
 
 
