@@ -6,17 +6,12 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdSize
-import com.google.android.gms.ads.AdView
-import com.google.android.gms.ads.MobileAds
 import com.odom.ledscreen.databinding.ActivityMainBinding
 
 
@@ -44,24 +39,11 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
     private lateinit var buttonLeft : ImageButton
     private lateinit var buttonRight : ImageButton
 
-    // 광고
-    lateinit var mAdView : AdView
-    private val adSize: AdSize
-        get() {
-            val display = windowManager.defaultDisplay
-            val outMetrics = DisplayMetrics()
-            display.getMetrics(outMetrics)
-
-            val density = outMetrics.density
-            val adWidthPixels = outMetrics.widthPixels.toFloat()
-            val adWidth = (adWidthPixels / density).toInt()
-            return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth)
-        }
-
-
     var visibleDialog1: Boolean = false
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var adsManager: AdsManager
+    private lateinit var gatekeeper: AdGatekeeper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +51,18 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        val store = PrefsAdStateStore(this)
+        gatekeeper = AdGatekeeper(store, FirstSession.isFirstSession(store))
+
+        adsManager = AdsManager(this)
+        adsManager.start {
+            runOnUiThread {
+                adsManager.attachAdaptiveBanner(binding.adContainer)
+                adsManager.loadInterstitial()
+                adsManager.preloadExitAd()
+            }
+        }
 
         ll_background = binding.llBackground
         buttonSelector01 = binding.buttonSelector01
@@ -211,13 +205,9 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
 
     }
 
-    override fun onStart() {
-        super.onStart()
-        // load Banner AD
-        MobileAds.initialize(this) {}
-        mAdView = findViewById(R.id.adMobView)
-        val adRequest = AdRequest.Builder().build()
-        mAdView.loadAd(adRequest)
+    override fun onDestroy() {
+        adsManager.destroy()
+        super.onDestroy()
     }
 
     private fun getColorsList(useAll: Boolean = false) : List<Int>{
