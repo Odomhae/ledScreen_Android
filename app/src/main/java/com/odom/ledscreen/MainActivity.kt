@@ -355,7 +355,7 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
         gatekeeper.onReviewRequested() // 성공 여부와 무관하게 1회만 시도
         val manager = ReviewManagerFactory.create(this)
         manager.requestReviewFlow().addOnCompleteListener { task ->
-            if (task.isSuccessful) {
+            if (task.isSuccessful && !isFinishing && !isDestroyed) {
                 manager.launchReviewFlow(this, task.result)
             }
         }
