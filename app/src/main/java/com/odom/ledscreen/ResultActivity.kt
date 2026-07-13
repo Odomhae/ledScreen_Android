@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import com.odom.ledscreen.databinding.ActivityMainBinding
 import com.odom.ledscreen.databinding.ActivityResultBinding
 
 private lateinit var resultBackground : ConstraintLayout
@@ -45,13 +44,9 @@ class ResultActivity  : AppCompatActivity() {
         resultText.setTextColor(ContextCompat.getColor(this, textColor))
         resultText.setTextSize(TypedValue.COMPLEX_UNIT_DIP , fontSize*2)
 
-        // TODO: Text Direction
-        val animMarqueeLeft : Animation = AnimationUtils.loadAnimation(this, R.anim.marquee_rtl)
-        val animMarqueeRight : Animation = AnimationUtils.loadAnimation(this, R.anim.marquee_ltr)
-
-        when(textDirection){
-            "LEFT" -> resultText.startAnimation(animMarqueeLeft)
-            "RIGHT" -> resultText.startAnimation(animMarqueeRight)
+        val speed = MarqueeSpeed.fromName(ledIntent.getStringExtra("Speed"))
+        when (textDirection) {
+            "LEFT", "RIGHT" -> MarqueeController().start(resultText, binding.clResult, textDirection!!, speed)
         }
 
 

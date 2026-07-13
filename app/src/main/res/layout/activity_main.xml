@@ -32,7 +32,7 @@
 
         <TextView
             android:id="@+id/textViewNote"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="200dp"
             android:gravity="center"
             android:layout_gravity="center"
@@ -150,6 +150,45 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="24dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_speed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/buttonSpeedSlow"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/selector_background"
+                    android:textColor="@color/white"
+                    android:text="@string/speed_slow" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/buttonSpeedNormal"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:background="@drawable/selector_background"
+                    android:textColor="@color/white"
+                    android:text="@string/speed_normal" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/buttonSpeedFast"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/selector_background"
+                    android:textColor="@color/white"
+                    android:text="@string/speed_fast" />
 
             </LinearLayout>
 

@@ -46,6 +46,9 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
 
     var visibleDialog1: Boolean = false
 
+    private val previewMarquee = MarqueeController()
+    private var marqueeSpeed = MarqueeSpeed.NORMAL
+
     private lateinit var binding: ActivityMainBinding
     private lateinit var adsManager: AdsManager
     private lateinit var gatekeeper: AdGatekeeper
@@ -153,33 +156,24 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
 
         buttonLeft.setOnClickListener {
             gatekeeper.onSettingChanged()
-            val animMarqueeLeft : Animation = AnimationUtils.loadAnimation(this, R.anim.marquee_rtl)
-            if (!buttonLeft.isSelected) {
-                textViewNote.startAnimation(animMarqueeLeft)
-                buttonLeft.isSelected = true
-                buttonRight.isSelected = false
-                TextDirection = "LEFT"
-            } else {
-                textViewNote.clearAnimation()
-                buttonLeft.isSelected = false
-                TextDirection = "STOP"
-            }
+            TextDirection = if (buttonLeft.isSelected) "STOP" else "LEFT"
+            buttonLeft.isSelected = TextDirection == "LEFT"
+            buttonRight.isSelected = false
+            restartPreviewMarquee()
         }
 
         buttonRight.setOnClickListener {
             gatekeeper.onSettingChanged()
-            val animMarqueeRight : Animation = AnimationUtils.loadAnimation(this, R.anim.marquee_ltr)
-            if (!buttonRight.isSelected) {
-                textViewNote.startAnimation(animMarqueeRight)
-                TextDirection = "RIGHT"
-                buttonRight.isSelected = true
-                buttonLeft.isSelected = false
-            } else {
-                textViewNote.clearAnimation()
-                buttonRight.isSelected = false
-                TextDirection = "STOP"
-            }
+            TextDirection = if (buttonRight.isSelected) "STOP" else "RIGHT"
+            buttonRight.isSelected = TextDirection == "RIGHT"
+            buttonLeft.isSelected = false
+            restartPreviewMarquee()
         }
+
+        binding.buttonSpeedSlow.setOnClickListener { selectSpeed(MarqueeSpeed.SLOW) }
+        binding.buttonSpeedNormal.setOnClickListener { selectSpeed(MarqueeSpeed.NORMAL) }
+        binding.buttonSpeedFast.setOnClickListener { selectSpeed(MarqueeSpeed.FAST) }
+        binding.buttonSpeedNormal.isSelected = true
 
         buttonPlus.setOnClickListener {
             Fontsize += 4f
@@ -199,6 +193,7 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
             override fun onTextChanged(s: CharSequence, start: Int,
                                        before: Int, count: Int) {
                 textViewNote.text = s
+                restartPreviewMarquee()
             }
         })
 
@@ -218,6 +213,22 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
             }
         })
 
+    }
+
+    private fun selectSpeed(speed: MarqueeSpeed) {
+        if (marqueeSpeed != speed) gatekeeper.onSettingChanged()
+        marqueeSpeed = speed
+        binding.buttonSpeedSlow.isSelected = speed == MarqueeSpeed.SLOW
+        binding.buttonSpeedNormal.isSelected = speed == MarqueeSpeed.NORMAL
+        binding.buttonSpeedFast.isSelected = speed == MarqueeSpeed.FAST
+        restartPreviewMarquee()
+    }
+
+    private fun restartPreviewMarquee() {
+        when (TextDirection) {
+            "LEFT", "RIGHT" -> previewMarquee.start(textViewNote, ll_background, TextDirection, marqueeSpeed)
+            else -> previewMarquee.stop(textViewNote)
+        }
     }
 
     private fun showExitDialog() {
@@ -248,6 +259,7 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
         ledIntent.putExtra("fontSize", Fontsize)
         ledIntent.putExtra("Direction", TextDirection) // STOP / LEFT / RIGHT
         ledIntent.putExtra("isBlink", buttonBlink.isSelected)
+        ledIntent.putExtra("Speed", marqueeSpeed.name)
 
         gatekeeper.onResultUsed()
         pendingReviewCheck = true
