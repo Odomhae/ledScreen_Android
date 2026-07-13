@@ -21,10 +21,13 @@ enum class MarqueeSpeed(val dpPerSecond: Float) {
  */
 class MarqueeController {
     private var animator: ValueAnimator? = null
+    private var generation = 0
 
     fun start(textView: TextView, container: View, direction: String, speed: MarqueeSpeed) {
         stop(textView)
+        val myGeneration = ++generation
         container.post {
+            if (myGeneration != generation) return@post
             val textWidth = textView.width.toFloat()
             if (textWidth <= 0f || container.width <= 0) return@post
 
@@ -49,6 +52,7 @@ class MarqueeController {
     }
 
     fun stop(textView: TextView) {
+        generation++
         animator?.cancel()
         animator = null
         textView.translationX = 0f
