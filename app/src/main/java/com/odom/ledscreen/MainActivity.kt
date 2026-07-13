@@ -58,9 +58,11 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
         adsManager = AdsManager(this)
         adsManager.start {
             runOnUiThread {
-                adsManager.attachAdaptiveBanner(binding.adContainer)
-                adsManager.loadInterstitial()
-                adsManager.preloadExitAd()
+                if (!isDestroyed) {
+                    adsManager.attachAdaptiveBanner(binding.adContainer)
+                    adsManager.loadInterstitial()
+                    adsManager.preloadExitAd()
+                }
             }
         }
 
