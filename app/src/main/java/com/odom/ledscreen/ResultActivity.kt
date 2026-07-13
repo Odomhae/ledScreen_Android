@@ -58,12 +58,12 @@ class ResultActivity  : AppCompatActivity() {
 
         resultText.text = textInput
         resultBackground.setBackgroundColor(ContextCompat.getColor(this, backColor))
+        resultText.setTextSize(TypedValue.COMPLEX_UNIT_DIP , fontSize*2)
         if (isRainbow) {
             TextEffects.applyRainbow(resultText)
         } else {
             resultText.setTextColor(ContextCompat.getColor(this, textColor))
         }
-        resultText.setTextSize(TypedValue.COMPLEX_UNIT_DIP , fontSize*2)
 
         val speed = MarqueeSpeed.fromName(ledIntent.getStringExtra("Speed"))
         when (textDirection) {

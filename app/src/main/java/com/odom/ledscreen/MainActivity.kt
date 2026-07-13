@@ -194,11 +194,15 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
         buttonPlus.setOnClickListener {
             Fontsize += 4f
             textViewNote.setTextSize(TypedValue.COMPLEX_UNIT_DIP , Fontsize)
+            if (isRainbow) TextEffects.applyRainbow(textViewNote)
+            restartPreviewMarquee()
         }
 
         buttonMinus.setOnClickListener {
             Fontsize -= 4f
             textViewNote.setTextSize(TypedValue.COMPLEX_UNIT_DIP , Fontsize)
+            if (isRainbow) TextEffects.applyRainbow(textViewNote)
+            restartPreviewMarquee()
         }
 
         editTextInput.addTextChangedListener(object : TextWatcher {
@@ -258,6 +262,7 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
             TextEffects.clear(textViewNote)
             textViewNote.setTextColor(ContextCompat.getColor(this, preset.textColor))
         } else {
+            colorSelectorDialog2.selectedColor = null
             TextEffects.applyRainbow(textViewNote)
         }
     }
