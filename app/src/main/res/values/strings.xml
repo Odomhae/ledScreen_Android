@@ -22,4 +22,6 @@
     <string name="speed_normal">Normal</string>
     <string name="speed_fast">Fast</string>
 
+    <string name="tap_to_exit">Tap the screen to go back</string>
+
 </resources>
