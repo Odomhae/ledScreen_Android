@@ -14,4 +14,8 @@
     <string name="interstitial_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
     <string name="exit_mrec_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
 
+    <string name="exit_dialog_message">Quit LED Screen?</string>
+    <string name="exit">Exit</string>
+    <string name="cancel">Cancel</string>
+
 </resources>

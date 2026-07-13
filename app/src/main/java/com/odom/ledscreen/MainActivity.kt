@@ -7,9 +7,13 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.TypedValue
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.*
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.odom.ledscreen.databinding.ActivityMainBinding
@@ -205,6 +209,31 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
             }
         }
 
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                showExitDialog()
+            }
+        })
+
+    }
+
+    private fun showExitDialog() {
+        val content = layoutInflater.inflate(R.layout.dialog_exit, null)
+        val adContainer = content.findViewById<FrameLayout>(R.id.exitAdContainer)
+
+        val exitAd = adsManager.exitAdView
+        if (exitAd != null && adsManager.isExitAdLoaded) {
+            (exitAd.parent as? ViewGroup)?.removeView(exitAd)
+            adContainer.addView(exitAd)
+        } else {
+            adContainer.visibility = View.GONE // 광고 없으면 다이얼로그만 (블로킹 금지)
+        }
+
+        AlertDialog.Builder(this)
+            .setView(content)
+            .setPositiveButton(R.string.exit) { _, _ -> finish() }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
     }
 
     private fun launchResult() {
