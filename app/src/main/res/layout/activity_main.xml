@@ -17,7 +17,7 @@
         app:layout_constraintBottom_toTopOf="@+id/ll_background"
         app:flow_verticalAlign="center"
         app:flow_horizontalAlign="start"
-        android:textColor="@color/amber"/>
+        android:textColor="@color/neon_green"/>
 
     <LinearLayout
         android:id="@+id/ll_background"
@@ -56,9 +56,11 @@
         android:text="love♥"
         android:singleLine="true"
         android:imeOptions="actionDone"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
+        android:textColorHint="@color/text_hint"
+        android:background="@color/dark_surface"
+        android:paddingHorizontal="12dp"
         android:layout_marginVertical="10dp"
-        android:background="@color/white"
         app:layout_constraintTop_toBottomOf="@+id/ll_background" />
 
     <ScrollView

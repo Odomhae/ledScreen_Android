@@ -30,4 +30,8 @@
     <color name="dark_button_off">#FF4B4C4B</color>
     <color name="dark_button_on">#ffe4e4e4</color>
 
+    <color name="neon_green">#39FF14</color>
+    <color name="dark_surface">#1E1E1E</color>
+    <color name="text_hint">#66FFFFFF</color>
+
 </resources>
