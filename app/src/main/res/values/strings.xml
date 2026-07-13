@@ -6,13 +6,11 @@
 
     <string name="TEST_banner_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
     <string name="TEST_admob_app_id" translatable="false"> ca-app-pub-3940256099942544~3347511713</string>
+    <string name="TEST_interstitial_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
 
     <string name="REAL_banner_ad_unit_id" translatable="false">ca-app-pub-6729344454320392/9540756826</string>
     <string name="REAL_admob_app_id" translatable="false">ca-app-pub-6729344454320392~4373024775</string>
-
-    <!-- 개발용 테스트 유닛. 릴리스 전 AdMob 콘솔에서 만든 실제 유닛으로 교체할 것 (Task 12) -->
-    <string name="interstitial_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
-    <string name="exit_mrec_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="REAL_interstitial_ad_unit_id" translatable="false">ca-app-pub-6729344454320392/1103705397</string>
 
     <string name="exit_dialog_message">Quit LED Screen?</string>
     <string name="exit">Exit</string>

@@ -22,6 +22,8 @@ class AdsManager(private val activity: Activity) {
 
     private val isMobileAdsInitialized = AtomicBoolean(false)
     private var interstitialAd: InterstitialAd? = null
+    private var bannerAdView: AdView? = null
+    private var isLoadingInterstitial = false
 
     var exitAdView: AdView? = null
         private set
@@ -30,7 +32,7 @@ class AdsManager(private val activity: Activity) {
 
     val isInterstitialReady: Boolean get() = interstitialAd != null
 
-    /** UMP 동의 확인 후 SDK 초기화. onAdsAvailable은 백그라운드 스레드에서 호출될 수 있다. */
+    /** UMP 동의 확인 후 SDK 초기화. onAdsAvailable은 메인 스레드에서 호출된다(UMP/GMA가 메인 스레드로 전달); 호출부의 runOnUiThread는 방어적 처리다. */
     fun start(onAdsAvailable: () -> Unit) {
         val consentInfo = UserMessagingPlatform.getConsentInformation(activity)
         val params = ConsentRequestParameters.Builder().build()
@@ -59,12 +61,14 @@ class AdsManager(private val activity: Activity) {
     // ---- 적응형 앵커 배너 ----
 
     fun attachAdaptiveBanner(container: ViewGroup) {
+        bannerAdView?.destroy()
         val adView = AdView(activity)
-        adView.adUnitId = activity.getString(R.string.REAL_banner_ad_unit_id)
+        adView.adUnitId = activity.getString(R.string.TEST_banner_ad_unit_id)
         adView.setAdSize(adaptiveAdSize())
         container.removeAllViews()
         container.addView(adView)
         adView.loadAd(AdRequest.Builder().build())
+        bannerAdView = adView
     }
 
     private fun adaptiveAdSize(): AdSize {
@@ -76,18 +80,21 @@ class AdsManager(private val activity: Activity) {
     // ---- 전면광고 ----
 
     fun loadInterstitial() {
-        if (interstitialAd != null) return
+        if (interstitialAd != null || isLoadingInterstitial) return
+        isLoadingInterstitial = true
         InterstitialAd.load(
             activity,
-            activity.getString(R.string.interstitial_ad_unit_id),
+            activity.getString(R.string.TEST_interstitial_ad_unit_id),
             AdRequest.Builder().build(),
             object : InterstitialAdLoadCallback() {
                 override fun onAdLoaded(ad: InterstitialAd) {
                     interstitialAd = ad
+                    isLoadingInterstitial = false
                 }
 
                 override fun onAdFailedToLoad(error: LoadAdError) {
                     interstitialAd = null
+                    isLoadingInterstitial = false
                 }
             })
     }
@@ -126,7 +133,7 @@ class AdsManager(private val activity: Activity) {
     fun preloadExitAd() {
         if (exitAdView != null) return
         val adView = AdView(activity)
-        adView.adUnitId = activity.getString(R.string.exit_mrec_ad_unit_id)
+        adView.adUnitId = activity.getString(R.string.TEST_banner_ad_unit_id)
         adView.setAdSize(AdSize.MEDIUM_RECTANGLE)
         adView.adListener = object : AdListener() {
             override fun onAdLoaded() {
@@ -142,6 +149,8 @@ class AdsManager(private val activity: Activity) {
     }
 
     fun destroy() {
+        bannerAdView?.destroy()
+        bannerAdView = null
         exitAdView?.destroy()
         exitAdView = null
         isExitAdLoaded = false

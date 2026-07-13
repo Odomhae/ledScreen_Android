@@ -20,6 +20,7 @@ class ResultActivity  : AppCompatActivity() {
     private lateinit var resultBackground: ConstraintLayout
     private lateinit var resultText : TextView
     private lateinit var binding: ActivityResultBinding
+    private val marquee = MarqueeController()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,7 +68,7 @@ class ResultActivity  : AppCompatActivity() {
 
         val speed = MarqueeSpeed.fromName(ledIntent.getStringExtra("Speed"))
         when (textDirection) {
-            "LEFT", "RIGHT" -> MarqueeController().start(resultText, binding.clResult, textDirection!!, speed)
+            "LEFT", "RIGHT" -> marquee.start(resultText, binding.clResult, textDirection!!, speed)
         }
 
 
@@ -78,5 +79,10 @@ class ResultActivity  : AppCompatActivity() {
 
         binding.clResult.setOnClickListener { finish() }
         Toast.makeText(this, R.string.tap_to_exit, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onDestroy() {
+        if (::resultText.isInitialized) marquee.stop(resultText)
+        super.onDestroy()
     }
 }

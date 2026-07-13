@@ -29,6 +29,8 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
     private val COLOR_02 = "COLOR_02"
     private val DIALOG_01_IS_VISIBLE = "DIALOG_01_IS_VISIBLE"
     private val DIALOG_02_IS_VISIBLE = "DIALOG_02_IS_VISIBLE"
+    private val IS_RAINBOW = "IS_RAINBOW"
+    private val MARQUEE_SPEED = "MARQUEE_SPEED"
     private var Fontsize = 54f
     private var TextDirection = "STOP"
 
@@ -48,6 +50,7 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
 
     private val previewMarquee = MarqueeController()
     private var marqueeSpeed = MarqueeSpeed.NORMAL
+    private var blinkAnimator: ObjectAnimator? = null
 
     private var isRainbow = false
 
@@ -144,25 +147,24 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
         buttonSelector01.setOnClickListener { showDialog(colorSelectorDialog1, COLOR_SELECTOR_01) }
         buttonSelector02.setOnClickListener { showDialog(colorSelectorDialog2, COLOR_SELECTOR_02) }
 
-        val animator =
-            ObjectAnimator.ofFloat(textViewNote, "alpha", 0.0f, 1.0f)
+        blinkAnimator = ObjectAnimator.ofFloat(textViewNote, "alpha", 0.0f, 1.0f)
 
         // duration of one color
-        animator.duration = 500
+        blinkAnimator?.duration = 500
         // color will be show in reverse manner
-        animator.repeatCount = Animation.REVERSE
+        blinkAnimator?.repeatCount = Animation.REVERSE
         // It will be repeated up to infinite time
-        animator.repeatCount = Animation.INFINITE
+        blinkAnimator?.repeatCount = Animation.INFINITE
 
         buttonBlink.setOnClickListener {
             gatekeeper.onSettingChanged()
             val animBlink: Animation = AnimationUtils.loadAnimation(this, R.anim.blink)
             if (!buttonBlink.isSelected) {
-                animator.start()
+                blinkAnimator?.start()
                 //textViewNote.startAnimation(animBlink)
                 buttonBlink.isSelected = true
             } else {
-                animator.cancel()
+                blinkAnimator?.cancel()
          //       textViewNote.clearAnimation()
                 buttonBlink.isSelected = false
             }
@@ -224,6 +226,7 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
                     onShown = { gatekeeper.onInterstitialShown() },
                     onDismissed = { launchResult() })
             } else {
+                adsManager.loadInterstitial()
                 launchResult()
             }
         }
@@ -233,6 +236,15 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
                 showExitDialog()
             }
         })
+
+        if (savedInstanceState != null) {
+            marqueeSpeed = MarqueeSpeed.fromName(savedInstanceState.getString(MARQUEE_SPEED))
+            selectSpeed(marqueeSpeed) // 동일 값이라 설정변경 카운트 없음, 버튼 상태만 동기화
+            if (savedInstanceState.getBoolean(IS_RAINBOW, false)) {
+                isRainbow = true
+                TextEffects.applyRainbow(textViewNote)
+            }
+        }
 
     }
 
@@ -320,6 +332,10 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
     }
 
     override fun onDestroy() {
+        exitDialog?.dismiss()
+        exitDialog = null
+        if (::textViewNote.isInitialized) previewMarquee.stop(textViewNote)
+        blinkAnimator?.cancel()
         adsManager.destroy()
         super.onDestroy()
     }
@@ -383,6 +399,8 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
 
         outState.putBoolean(DIALOG_01_IS_VISIBLE, colorSelectorDialog1.isVisible)
         outState.putBoolean(DIALOG_02_IS_VISIBLE, colorSelectorDialog2.isVisible)
+        outState.putBoolean(IS_RAINBOW, isRainbow)
+        outState.putString(MARQUEE_SPEED, marqueeSpeed.name)
 
         super.onSaveInstanceState(outState)
     }

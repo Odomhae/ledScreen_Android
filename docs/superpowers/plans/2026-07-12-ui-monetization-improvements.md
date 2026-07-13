@@ -345,7 +345,7 @@ git commit -m "feat: AdGatekeeper ad/review gating logic with unit tests"
 
 **Interfaces:**
 - Produces: `class AdsManager(activity: Activity)` — `start(onAdsAvailable: () -> Unit)`, `attachAdaptiveBanner(container: ViewGroup)`, `loadInterstitial()`, `val isInterstitialReady: Boolean`, `showInterstitial(onShown: () -> Unit, onDismissed: () -> Unit)`, `preloadExitAd()`, `val exitAdView: AdView?`, `val isExitAdLoaded: Boolean`, `destroy()`
-- 문자열 리소스: `interstitial_ad_unit_id`, `exit_mrec_ad_unit_id` (개발용 = 테스트 ID)
+- 문자열 리소스: `TEST_interstitial_ad_unit_id`, `TEST_banner_ad_unit_id` (개발용 = 테스트 ID)
 
 - [ ] **Step 1: strings.xml에 광고 유닛 ID 추가**
 
@@ -353,8 +353,8 @@ git commit -m "feat: AdGatekeeper ad/review gating logic with unit tests"
 
 ```xml
     <!-- 개발용 테스트 유닛. 릴리스 전 AdMob 콘솔에서 만든 실제 유닛으로 교체할 것 (Task 12) -->
-    <string name="interstitial_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
-    <string name="exit_mrec_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="TEST_interstitial_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="TEST_banner_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
 ```
 
 - [ ] **Step 2: AdsManager 구현**
@@ -443,7 +443,7 @@ class AdsManager(private val activity: Activity) {
         if (interstitialAd != null) return
         InterstitialAd.load(
             activity,
-            activity.getString(R.string.interstitial_ad_unit_id),
+            activity.getString(R.string.TEST_interstitial_ad_unit_id),
             AdRequest.Builder().build(),
             object : InterstitialAdLoadCallback() {
                 override fun onAdLoaded(ad: InterstitialAd) {
@@ -490,7 +490,7 @@ class AdsManager(private val activity: Activity) {
     fun preloadExitAd() {
         if (exitAdView != null) return
         val adView = AdView(activity)
-        adView.adUnitId = activity.getString(R.string.exit_mrec_ad_unit_id)
+        adView.adUnitId = activity.getString(R.string.TEST_banner_ad_unit_id)
         adView.setAdSize(AdSize.MEDIUM_RECTANGLE)
         adView.adListener = object : AdListener() {
             override fun onAdLoaded() {
@@ -1515,7 +1515,7 @@ Expected: 12 unit tests PASS, BUILD SUCCESSFUL
 
 - [ ] **Step 3: 실제 광고 유닛으로 교체 (사용자 작업 필요 — 차단점)**
 
-AdMob 콘솔(앱 `ca-app-pub-6729344454320392~4373024775`)에서 **전면광고 유닛**과 **MREC(배너) 유닛**을 새로 생성한 뒤, `strings.xml`의 `interstitial_ad_unit_id`, `exit_mrec_ad_unit_id` 값을 실제 유닛 ID로 교체하고 개발용 주석 삭제. **이 단계는 AdMob 콘솔 접근이 필요하므로 사용자에게 유닛 ID를 요청할 것.**
+AdMob 콘솔(앱 `ca-app-pub-6729344454320392~4373024775`)에서 **전면광고 유닛**과 **MREC(배너) 유닛**을 새로 생성한 뒤, `strings.xml`의 `TEST_interstitial_ad_unit_id`, `TEST_banner_ad_unit_id` 값을 실제 유닛 ID로 교체하고 개발용 주석 삭제. **이 단계는 AdMob 콘솔 접근이 필요하므로 사용자에게 유닛 ID를 요청할 것.**
 
 - [ ] **Step 4: 릴리스 빌드**
 
