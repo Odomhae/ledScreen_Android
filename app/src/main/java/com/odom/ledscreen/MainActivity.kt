@@ -49,6 +49,20 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
     private val previewMarquee = MarqueeController()
     private var marqueeSpeed = MarqueeSpeed.NORMAL
 
+    private var isRainbow = false
+
+    /** textColor가 null이면 무지개 */
+    private data class LedPreset(val label: String, val backColor: Int, val textColor: Int?)
+
+    private val presets = listOf(
+        LedPreset("Neon", R.color.black, R.color.neon_green),
+        LedPreset("Fire", R.color.black, R.color.red),
+        LedPreset("Ice", R.color.black, R.color.cyan),
+        LedPreset("Sky", R.color.blue, R.color.white),
+        LedPreset("Bee", R.color.black, R.color.yellow),
+        LedPreset("Rainbow", R.color.black, null)
+    )
+
     private lateinit var binding: ActivityMainBinding
     private lateinit var adsManager: AdsManager
     private lateinit var gatekeeper: AdGatekeeper
@@ -175,6 +189,8 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
         binding.buttonSpeedFast.setOnClickListener { selectSpeed(MarqueeSpeed.FAST) }
         binding.buttonSpeedNormal.isSelected = true
 
+        buildPresetChips()
+
         buttonPlus.setOnClickListener {
             Fontsize += 4f
             textViewNote.setTextSize(TypedValue.COMPLEX_UNIT_DIP , Fontsize)
@@ -193,6 +209,7 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
             override fun onTextChanged(s: CharSequence, start: Int,
                                        before: Int, count: Int) {
                 textViewNote.text = s
+                if (isRainbow) TextEffects.applyRainbow(textViewNote)
                 restartPreviewMarquee()
             }
         })
@@ -213,6 +230,36 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
             }
         })
 
+    }
+
+    private fun buildPresetChips() {
+        val margin = (8 * resources.displayMetrics.density).toInt()
+        presets.forEach { preset ->
+            val chip = Button(this)
+            chip.text = preset.label
+            val lp = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            lp.marginEnd = margin
+            chip.layoutParams = lp
+            chip.setOnClickListener { applyPreset(preset) }
+            binding.llPresets.addView(chip)
+        }
+    }
+
+    private fun applyPreset(preset: LedPreset) {
+        gatekeeper.onSettingChanged()
+
+        colorSelectorDialog1.selectedColor = preset.backColor
+        ll_background.setBackgroundColor(ContextCompat.getColor(this, preset.backColor))
+
+        isRainbow = preset.textColor == null
+        if (preset.textColor != null) {
+            colorSelectorDialog2.selectedColor = preset.textColor
+            TextEffects.clear(textViewNote)
+            textViewNote.setTextColor(ContextCompat.getColor(this, preset.textColor))
+        } else {
+            TextEffects.applyRainbow(textViewNote)
+        }
     }
 
     private fun selectSpeed(speed: MarqueeSpeed) {
@@ -260,6 +307,7 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
         ledIntent.putExtra("Direction", TextDirection) // STOP / LEFT / RIGHT
         ledIntent.putExtra("isBlink", buttonBlink.isSelected)
         ledIntent.putExtra("Speed", marqueeSpeed.name)
+        ledIntent.putExtra("isRainbow", isRainbow)
 
         gatekeeper.onResultUsed()
         pendingReviewCheck = true
@@ -346,6 +394,8 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
 
         if (tagDialog == COLOR_SELECTOR_02) {
             if (selectedColor != null) {
+                isRainbow = false
+                TextEffects.clear(textViewNote)
                 textViewNote.setTextColor(ContextCompat.getColor(this, selectedColor))
 
             } else {

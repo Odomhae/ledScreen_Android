@@ -51,13 +51,18 @@ class ResultActivity  : AppCompatActivity() {
         val fontSize =  ledIntent.getFloatExtra("fontSize",34F)
         val textDirection = ledIntent.getStringExtra("Direction")
         val isBlink = ledIntent.getBooleanExtra("isBlink" , false)
+        val isRainbow = ledIntent.getBooleanExtra("isRainbow", false)
 
         resultBackground = binding.clResult
         resultText = binding.tvResult
 
         resultText.text = textInput
         resultBackground.setBackgroundColor(ContextCompat.getColor(this, backColor))
-        resultText.setTextColor(ContextCompat.getColor(this, textColor))
+        if (isRainbow) {
+            TextEffects.applyRainbow(resultText)
+        } else {
+            resultText.setTextColor(ContextCompat.getColor(this, textColor))
+        }
         resultText.setTextSize(TypedValue.COMPLEX_UNIT_DIP , fontSize*2)
 
         val speed = MarqueeSpeed.fromName(ledIntent.getStringExtra("Speed"))
