@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
     private lateinit var binding: ActivityMainBinding
     private lateinit var adsManager: AdsManager
     private lateinit var gatekeeper: AdGatekeeper
+    private var exitDialog: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -218,6 +219,7 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
     }
 
     private fun showExitDialog() {
+        if (exitDialog?.isShowing == true) return
         val content = layoutInflater.inflate(R.layout.dialog_exit, null)
         val adContainer = content.findViewById<FrameLayout>(R.id.exitAdContainer)
 
@@ -229,7 +231,7 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
             adContainer.visibility = View.GONE // 광고 없으면 다이얼로그만 (블로킹 금지)
         }
 
-        AlertDialog.Builder(this)
+        exitDialog = AlertDialog.Builder(this)
             .setView(content)
             .setPositiveButton(R.string.exit) { _, _ -> finish() }
             .setNegativeButton(R.string.cancel, null)
