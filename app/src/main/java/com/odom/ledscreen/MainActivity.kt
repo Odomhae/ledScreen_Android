@@ -131,6 +131,7 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
         animator.repeatCount = Animation.INFINITE
 
         buttonBlink.setOnClickListener {
+            gatekeeper.onSettingChanged()
             val animBlink: Animation = AnimationUtils.loadAnimation(this, R.anim.blink)
             if (!buttonBlink.isSelected) {
                 animator.start()
@@ -144,6 +145,7 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
         }
 
         buttonLeft.setOnClickListener {
+            gatekeeper.onSettingChanged()
             val animMarqueeLeft : Animation = AnimationUtils.loadAnimation(this, R.anim.marquee_rtl)
             if (!buttonLeft.isSelected) {
                 textViewNote.startAnimation(animMarqueeLeft)
@@ -158,6 +160,7 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
         }
 
         buttonRight.setOnClickListener {
+            gatekeeper.onSettingChanged()
             val animMarqueeRight : Animation = AnimationUtils.loadAnimation(this, R.anim.marquee_ltr)
             if (!buttonRight.isSelected) {
                 textViewNote.startAnimation(animMarqueeRight)
@@ -193,18 +196,28 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
         })
 
         buttonStart.setOnClickListener {
-            val ledIntent = Intent(this, ResultActivity::class.java)
-            ledIntent.putExtra("TextInput",  textViewNote.text.toString())
-            ledIntent.putExtra("BackColor",  colorSelectorDialog1.selectedColor)
-            ledIntent.putExtra("TextColor",  colorSelectorDialog2.selectedColor)
-
-            ledIntent.putExtra("fontSize",  Fontsize)
-            ledIntent.putExtra("Direction" , TextDirection) // 글자 이동방향, STOP / LEFT / RIGHT
-            ledIntent.putExtra("isBlink",  buttonBlink.isSelected)
-
-            startActivity(ledIntent)
+            if (gatekeeper.shouldShowInterstitialOnStart() && adsManager.isInterstitialReady) {
+                adsManager.showInterstitial(
+                    onShown = { gatekeeper.onInterstitialShown() },
+                    onDismissed = { launchResult() })
+            } else {
+                launchResult()
+            }
         }
 
+    }
+
+    private fun launchResult() {
+        val ledIntent = Intent(this, ResultActivity::class.java)
+        ledIntent.putExtra("TextInput", textViewNote.text.toString())
+        ledIntent.putExtra("BackColor", colorSelectorDialog1.selectedColor)
+        ledIntent.putExtra("TextColor", colorSelectorDialog2.selectedColor)
+        ledIntent.putExtra("fontSize", Fontsize)
+        ledIntent.putExtra("Direction", TextDirection) // STOP / LEFT / RIGHT
+        ledIntent.putExtra("isBlink", buttonBlink.isSelected)
+
+        gatekeeper.onResultUsed()
+        startActivity(ledIntent)
     }
 
     override fun onDestroy() {
@@ -276,6 +289,7 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
     }
 
     override fun onColorClick(tagDialog: String, selectedColor: Int?) {
+        gatekeeper.onSettingChanged()
         if (tagDialog == COLOR_SELECTOR_01) {
             if (selectedColor != null) {
                 ll_background.setBackgroundColor(ContextCompat.getColor(this, colorSelectorDialog1.selectedColor!!))
