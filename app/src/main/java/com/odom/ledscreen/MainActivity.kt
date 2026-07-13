@@ -16,6 +16,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.google.android.play.core.review.ReviewManagerFactory
 import com.odom.ledscreen.databinding.ActivityMainBinding
 
 
@@ -49,6 +50,7 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
     private lateinit var adsManager: AdsManager
     private lateinit var gatekeeper: AdGatekeeper
     private var exitDialog: AlertDialog? = null
+    private var pendingReviewCheck = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -248,6 +250,7 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
         ledIntent.putExtra("isBlink", buttonBlink.isSelected)
 
         gatekeeper.onResultUsed()
+        pendingReviewCheck = true
         startActivity(ledIntent)
     }
 
@@ -335,6 +338,25 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
 
             } else {
                 textViewNote.background = null
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (pendingReviewCheck) {
+            pendingReviewCheck = false
+            maybeRequestReview()
+        }
+    }
+
+    private fun maybeRequestReview() {
+        if (!gatekeeper.shouldRequestReview()) return
+        gatekeeper.onReviewRequested() // 성공 여부와 무관하게 1회만 시도
+        val manager = ReviewManagerFactory.create(this)
+        manager.requestReviewFlow().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                manager.launchReviewFlow(this, task.result)
             }
         }
     }
