@@ -16,6 +16,9 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.odom.ledscreen.databinding.ActivityMainBinding
 
@@ -78,6 +81,14 @@ class MainActivity : AppCompatActivity(), ColorSelectorDialog.OnDialogColorClick
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val p = (8 * resources.displayMetrics.density).toInt()
+            v.setPadding(bars.left + p, bars.top + p, bars.right + p, bars.bottom + p)
+            insets
+        }
 
         val store = PrefsAdStateStore(this)
         gatekeeper = AdGatekeeper(store, FirstSession.isFirstSession(store))
